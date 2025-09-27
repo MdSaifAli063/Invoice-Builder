@@ -22,6 +22,8 @@ A tiny, zero‑database invoice builder with a clean UI. Edit company/client inf
 All data is in-memory for simplicity (resets on restart).
 
 ---
+## 🖼️ Preview
+
 
 ## 🚀 Quickstart
 
