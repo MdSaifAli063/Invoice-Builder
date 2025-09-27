@@ -23,6 +23,9 @@ All data is in-memory for simplicity (resets on restart).
 
 ---
 ## 🖼️ Preview
+- Setup
+![image](https://github.com/MdSaifAli063/Invoice-Builder/blob/ab7662e6134d92bd8ba35699b55182cc78efef49/Screenshot%202025-09-28%20014932.png)
+
 
 
 ## 🚀 Quickstart
