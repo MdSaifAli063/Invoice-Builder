@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark" />
+  <title>Invoice Setup</title>
+  <style>
+   /* Light theme (default) */
+:root {
+  /* Layout */
+  --container-max: 1200px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,.06);
+  --shadow-md: 0 10px 25px rgba(0,0,0,.10);
+
+  /* Typography */
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  --text-size: 15px;
+  --line-height: 1.45;
+
+  /* Colors */
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #e5e7eb;
+  --primary: #0b1220;
+  --accent: #2563eb;
+  --accent-600: #1d4ed8;
+  --accent-700: #1e40af;
+
+  --success: #16a34a;
+  --success-700: #15803d;
+  --danger: #dc2626;
+  --danger-700: #b91c1c;
+
+  --table-header: #f3f4f6;
+  --table-row-alt: #fafbff;
+  --focus: 0 0 0 3px rgba(37, 99, 235, .35);
+
+  --toolbar-grad-from: #ffffff;
+  --toolbar-grad-to: #f9fafb;
+  --header-grad-from: #0b1220;
+  --header-grad-to: #1f2937;
+}
+
+/* Dark theme overrides */
+.theme-dark {
+  --bg: #0f172a;
+  --card: #0b1326;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --border: #1f2a44;
+  --primary: #cbd5e1;
+  --accent: #60a5fa;
+  --accent-600: #3b82f6;
+  --accent-700: #2563eb;
+  --success: #22c55e;
+  --success-700: #16a34a;
+  --danger: #ef4444;
+  --danger-700: #dc2626;
+
+  --table-header: #0f1a33;
+  --table-row-alt: #0e1830;
+  --toolbar-grad-from: #0b1326;
+  --toolbar-grad-to: #0b1326;
+  --header-grad-from: #0b1220;
+  --header-grad-to: #111827;
+  --focus: 0 0 0 3px rgba(96, 165, 250, .45);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font);
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 16px;
+  font-size: var(--text-size);
+  line-height: var(--line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  background-color: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(to right, var(--toolbar-grad-from), var(--toolbar-grad-to));
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.brand-mini { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--primary); }
+.brand-mini img { width: 30px; height: 30px; object-fit: contain; border-radius: 6px; background: #fff; box-shadow: var(--shadow-sm); }
+.brand-fallback {
+  width: 30px; height: 30px; display: grid; place-items: center;
+  border-radius: 6px; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, var(--accent-600), var(--accent-700));
+  box-shadow: var(--shadow-sm);
+}
+.toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* Buttons */
+.btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  line-height: 1;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,.12); }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible { outline: none; box-shadow: var(--focus); }
+.btn svg { width: 16px; height: 16px; }
+.btn-ghost { background: transparent; border-color: var(--border); }
+.btn-primary { background: var(--accent); color: #fff; border-color: transparent; }
+.btn-primary:hover { background: var(--accent-600); }
+.btn-success { background: var(--success); color: #fff; border-color: transparent; }
+.btn-success:hover { background: var(--success-700); }
+.btn-danger  { background: var(--danger);  color: #fff; border-color: transparent; }
+.btn-danger:hover { background: var(--danger-700); }
+
+/* Header */
+.header {
+  padding: 18px 24px;
+  background: linear-gradient(135deg, var(--header-grad-from), var(--header-grad-to));
+  color: #fff;
+}
+.header h1 { margin: 0; font-size: 22px; letter-spacing: .2px; }
+.header p { margin: 8px 0 0 0; opacity: .9; }
+
+/* Sections and cards */
+.section { padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--card); }
+
+.grid-3 { display: grid; gap: 16px; }
+@media (min-width: 1000px) { .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+.card h3 { margin: 0 0 10px 0; font-size: 16px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+.muted { color: var(--muted); font-size: 14px; }
+
+/* Form controls */
+label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; }
+input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="date"], textarea, select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
+  background: #fff;
+  color: var(--text);
+  min-height: 40px;
+}
+.theme-dark input, .theme-dark textarea, .theme-dark select { background: #0c1a36; border-color: #1f2a44; }
+textarea { resize: vertical; min-height: 92px; }
+input:focus, textarea:focus, select:focus { border-color: var(--accent-600); box-shadow: var(--focus); }
+
+.form-grid { display: grid; gap: 12px; }
+@media (min-width: 640px) {
+  .form-grid { grid-template-columns: repeat(4, 1fr); align-items: end; }
+  .form-grid .wide { grid-column: span 2; }
+  .form-grid .full { grid-column: 1/-1; }
+}
+
+/* Table */
+.table-wrap { overflow: auto; border-radius: 12px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: separate; border-spacing: 0; }
+thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--table-header);
+  text-align: left; padding: 12px;
+  font-size: 14px; color: var(--primary);
+  border-bottom: 1px solid var(--border);
+}
+tbody td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 14px; color: var(--text); }
+tbody tr:nth-child(odd) td { background: var(--table-row-alt); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(37,99,235,0.06); }
+.right { text-align: right; }
+.nowrap { white-space: nowrap; }
+
+/* Totals */
+.totals {
+  margin-top: 18px;
+  display: grid; gap: 8px; width: 100%;
+  max-width: 420px; margin-left: auto;
+  background: linear-gradient(180deg, rgba(37,99,235,0.06), transparent);
+  padding: 12px; border-radius: 10px;
+  border: 1px dashed var(--border);
+}
+.totals-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; font-size: 15px; color: var(--text); }
+.totals-row.total { font-weight: 700; font-size: 16px; border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 4px; }
+
+.flex { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pill {
+  display:inline-block; padding:4px 8px; border-radius:999px;
+  background: #eef2ff; color:#3730a3; font-size:12px; font-weight:600;
+}
+.theme-dark .pill { background: #172554; color: #a5b4fc; }
+
+/* ========================= */
+/* Add/Remove Items section  */
+/* (assumed to be the last .section on the page) */
+/* ========================= */
+
+.section:last-of-type {
+  padding-top: 16px;
+}
+
+/* Tighten card spacing in this section */
+.section:last-of-type .card { padding: 14px; }
+.section:last-of-type .card h3 { margin-bottom: 8px; align-items: center; gap: 8px; }
+
+/* Mobile: stack cards */
+.section:last-of-type .grid-3 {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+/* If Add card has inline grid-column: span 2; override it */
+.section:last-of-type .grid-3 > .card:first-child { grid-column: 1 / -1 !important; }
+.section:last-of-type .grid-3 > .card:last-child  { grid-column: 1 / -1; }
+
+/* Desktop: make Add card not oversized by constraining the column */
+@media (min-width: 900px) {
+  .section:last-of-type .grid-3 {
+    /* First column auto-sized up to a max via the card; second fills remaining */
+    grid-template-columns: auto minmax(280px, 1fr);
+    column-gap: 16px;
+    justify-content: space-between;
+  }
+  .section:last-of-type .grid-3 > .card:first-child {
+    /* Keep Add card compact */
+    max-width: 680px;      /* cap width so it doesn't look huge */
+    width: 100%;
+    justify-self: start;
+    grid-column: 1 / 2 !important;
+  }
+  .section:last-of-type .grid-3 > .card:last-child {
+    grid-column: 2 / 3 !important;
+  }
+}
+
+/* Forms inside Add/Remove cards */
+.section:last-of-type .form-grid {
+  grid-template-columns: 1fr; /* stack by default */
+  gap: 10px;
+  align-items: end;
+}
+
+/* Add Item form compact fields: qty | description | price | button */
+@media (min-width: 640px) {
+  .section:last-of-type .grid-3 > .card:first-child .form-grid {
+    grid-template-columns: 96px 1fr 140px auto;
+    column-gap: 10px;
+  }
+  .section:last-of-type #add_qty   { max-width: 96px; }
+  .section:last-of-type #add_price { max-width: 140px; }
+  .section:last-of-type .grid-3 > .card:first-child .form-grid .wide { grid-column: 2 / 3; }
+}
+
+/* Remove Item form: input | button */
+@media (min-width: 640px) {
+  .section:last-of-type .grid-3 > .card:last-child .form-grid {
+    grid-template-columns: 1fr auto;
+    column-gap: 10px;
+  }
+  .section:last-of-type .grid-3 > .card:last-child .form-grid .wide { grid-column: 1 / 2; }
+}
+
+/* Controls sizing in the last section */
+.section:last-of-type .btn { white-space: nowrap; padding: 8px 12px; min-height: 40px; }
+.section:last-of-type input,
+.section:last-of-type select { min-height: 40px; }
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn:hover { transition: none; }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toolbar" role="banner">
+      <div class="brand-mini">
+        {% if company and company.logo_url %}
+          <img src="{{ company.logo_url }}" alt="{{ company.name or 'Company' }} logo">
+        {% else %}
+          <div class="brand-fallback" aria-hidden="true">
+            {{ (company.name or 'C')[:1] | upper }}
+          </div>
+        {% endif %}
+        <span>Invoice Setup</span>
+      </div>
+      <div class="toolbar-actions">
+        <button id="themeToggle" class="btn btn-ghost" type="button" title="Toggle light/dark theme" aria-label="Toggle theme">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.64 13A9 9 0 1 1 11 2.36a7 7 0 1 0 10.64 10.64z"></path>
+          </svg>
+          Theme
+        </button>
+        <a class="btn btn-primary" href="/invoice?print=1" title="Go to invoice and auto-print">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 9V2h12v7M6 14H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2m-2 0H8v8h8v-8Z"/>
+          </svg>
+          Go to Invoice
+        </a>
+        <form action="/clear_all" method="post" onsubmit="return confirm('Clear all data?');" style="display:inline;">
+          <button class="btn btn-danger" type="submit" title="Reset all fields">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 6h18M8 6v12m8-12v12M5 6l1 14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-14"/>
+            </svg>
+            Reset
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="header">
+      <h1>Configure your invoice details</h1>
+      <p class="muted" style="color: rgba(255,255,255,.9);">Fill out your company, client, and invoice settings, then add line items below.</p>
+    </div>
+
+    <!-- Details forms -->
+    <div class="section">
+      <div class="grid-3">
+        <!-- Company Form -->
+        <div class="card">
+          <h3>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="icon-muted">
+              <path d="M3 21V5a2 2 0 0 1 2-2h6v18H3Zm8 0V7h8a2 2 0 0 1 2 2v12h-10ZM6 7h2v2H6V7Zm0 4h2v2H6v-2Zm0 4h2v2H6v-2Z"/>
+            </svg>
+            Company Details
+          </h3>
+          <form action="/update_company" method="post" class="form-grid">
+            <div class="full">
+              <label for="company_name">Company Name</label>
+              <input id="company_name" type="text" name="name" value="{{ company.name or '' }}" placeholder="Acme Inc.">
+            </div>
+            <div class="full">
+              <label for="company_address">Address</label>
+              <textarea id="company_address" name="address" placeholder="Street, City, State, ZIP">{{ company.address or '' }}</textarea>
+            </div>
+            <div>
+              <label for="company_phone">Phone</label>
+              <input id="company_phone" type="text" name="phone" value="{{ company.phone or '' }}" placeholder="+1 555-123-4567">
+            </div>
+            <div>
+              <label for="company_email">Email</label>
+              <input id="company_email" type="email" name="email" value="{{ company.email or '' }}" placeholder="billing@acme.com">
+            </div>
+            <div class="wide">
+              <label for="company_website">Website</label>
+              <input id="company_website" type="url" name="website" value="{{ company.website or '' }}" placeholder="https://www.acme.com">
+            </div>
+            <div class="full">
+              <label for="company_logo">Logo URL</label>
+              <input id="company_logo" type="url" name="logo_url" value="{{ company.logo_url or '' }}" placeholder="https://.../logo.png">
+            </div>
+            <div>
+              <label aria-hidden="true">&nbsp;</label>
+              <button class="btn btn-success" type="submit">Save</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Client Form -->
+        <div class="card">
+          <h3>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="icon-muted">
+              <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.33 0-8 2.17-8 5v3h16v-3c0-2.83-3.67-5-8-5Z"/>
+            </svg>
+            Bill To
+          </h3>
+          <form action="/update_client" method="post" class="form-grid">
+            <div class="full">
+              <label for="client_name">Client Name</label>
+              <input id="client_name" type="text" name="name" value="{{ client.name or '' }}" placeholder="Client LLC">
+            </div>
+            <div class="full">
+              <label for="client_address">Address</label>
+              <textarea id="client_address" name="address" placeholder="Street, City, State, ZIP">{{ client.address or '' }}</textarea>
+            </div>
+            <div>
+              <label for="client_phone">Phone</label>
+              <input id="client_phone" type="text" name="phone" value="{{ client.phone or '' }}" placeholder="+1 555-987-6543">
+            </div>
+            <div>
+              <label for="client_email">Email</label>
+              <input id="client_email" type="email" name="email" value="{{ client.email or '' }}" placeholder="ap@client.com">
+            </div>
+            <div>
+              <label aria-hidden="true">&nbsp;</label>
+              <button class="btn btn-success" type="submit">Save</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Invoice Meta Form -->
+        <div class="card">
+          <h3>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="icon-muted">
+              <path d="M7 2h10v4H7V2Zm0 6h10v14H7V8Zm2 2v2h6v-2H9Zm0 4v2h6v-2H9Z"/>
+            </svg>
+            Invoice Settings
+          </h3>
+          <form action="/update_meta" method="post" class="form-grid">
+            <div>
+              <label for="invoice_number">Invoice #</label>
+              <input id="invoice_number" type="text" name="invoice_number" value="{{ invoice_number or '' }}">
+            </div>
+            <div>
+              <label for="invoice_date">Date</label>
+              <input id="invoice_date" type="date" name="invoice_date" value="{{ invoice_date or '' }}">
+            </div>
+            <div>
+              <label for="due_date">Due Date</label>
+              <input id="due_date" type="date" name="due_date" value="{{ due_date or '' }}">
+            </div>
+            <div>
+              <label for="currency_symbol">Currency</label>
+              <input id="currency_symbol" type="text" name="currency_symbol" value="{{ currency_symbol or '$' }}" placeholder="$">
+            </div>
+            <div>
+              <label for="tax_rate">Tax Rate (%)</label>
+              <input id="tax_rate" type="number" name="tax_rate" step="0.01" min="0" max="100" value="{{ tax_rate or 3 }}">
+            </div>
+            <div>
+              <label for="shipping">Shipping</label>
+              <input id="shipping" type="number" name="shipping" step="0.01" min="0" value="{{ shipping or 0 }}">
+            </div>
+            <div>
+              <label for="amount_paid">Amount Paid</label>
+              <input id="amount_paid" type="number" name="amount_paid" step="0.01" min="0" value="{{ amount_paid or 0 }}">
+            </div>
+            <div class="full">
+              <label for="notes">Notes</label>
+              <textarea id="notes" name="notes" placeholder="Payment terms or thank you note...">{{ notes or '' }}</textarea>
+            </div>
+            <div>
+              <label aria-hidden="true">&nbsp;</label>
+              <button class="btn btn-success" type="submit">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items and Totals preview -->
+    <div class="section">
+      <div class="card">
+        <div class="flex" style="justify-content: space-between; align-items: baseline;">
+          <h3>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="icon-muted">
+              <path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"/>
+            </svg>
+            Line Items
+          </h3>
+          <span class="pill" aria-label="This table previews the current line items">Preview</span>
+        </div>
+        <div class="table-wrap" role="region" aria-label="Line items preview" tabindex="0">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col" style="width: 80px;">Qty</th>
+                <th scope="col">Description</th>
+                <th scope="col" class="right nowrap" style="width: 140px;">Unit Price</th>
+                <th scope="col" class="right nowrap" style="width: 140px;">Total</th>
+                <th scope="col" class="nowrap" style="width: 130px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+                {% set line_total = item.quantity * item.unit_price %}
+                <tr>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.description }}</td>
+                  <td class="right nowrap">{{ currency_symbol or '' }}{{ '%.2f'|format(item.unit_price) }}</td>
+                  <td class="right nowrap">{{ currency_symbol or '' }}{{ '%.2f'|format(line_total) }}</td>
+                  <td>
+                    <form action="/remove_item" method="post" style="display:inline;">
+                      <input type="hidden" name="description" value="{{ item.description }}">
+                      <button type="submit" class="btn btn-danger" aria-label="Remove {{ item.description }}">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+              {% if not items or items|length == 0 %}
+                <tr>
+                  <td colspan="5" class="muted">No items yet. Add your first line item below.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="totals" aria-live="polite">
+          <div class="totals-row">
+            <div>Subtotal</div>
+            <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(subtotal) }}</div>
+          </div>
+          <div class="totals-row">
+            <div>Tax{% if tax_rate %} ({{ tax_rate }}%){% endif %}</div>
+            <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(tax) }}</div>
+          </div>
+          <div class="totals-row">
+            <div>Shipping</div>
+            <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(shipping) }}</div>
+          </div>
+          <div class="totals-row total">
+            <div>Total</div>
+            <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(total) }}</div>
+          </div>
+          {% if amount_paid is defined and amount_paid|float > 0 %}
+          <div class="totals-row">
+            <div>Amount Paid</div>
+            <div class="right">- {{ currency_symbol or '' }}{{ '%.2f'|format(amount_paid|float) }}</div>
+          </div>
+          <div class="totals-row">
+            <div>Balance Due</div>
+            <div class="right"><strong>{{ currency_symbol or '' }}{{ '%.2f'|format(total - (amount_paid|float)) }}</strong></div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Remove Items -->
+    <div class="section">
+      <div class="grid-3">
+        <div class="card" style="grid-column: span 2;">
+          <form action="/add_item" method="post" class="form-grid">
+            <div>
+              <label for="add_qty">Quantity</label>
+              <input id="add_qty" type="number" name="quantity" min="1" step="1" required>
+            </div>
+            <div class="wide">
+              <label for="add_desc">Description</label>
+              <input id="add_desc" type="text" name="description" placeholder="e.g., Web design services" required>
+            </div>
+            <div>
+              <label for="add_price">Unit Price</label>
+              <input id="add_price" type="number" step="0.01" min="0" name="unit_price" required>
+            </div>
+            <div>
+              <label aria-hidden="true">&nbsp;</label>
+              <button class="btn btn-success" type="submit">Add Item</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <form action="/remove_item" method="post" class="form-grid">
+            <div class="wide">
+              <label for="remove_desc">Description to Remove</label>
+              <input id="remove_desc" type="text" name="description" placeholder="Match description exactly" required>
+            </div>
+            <div>
+              <label aria-hidden="true">&nbsp;</label>
+              <button class="btn btn-danger" type="submit">Remove</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Theme handling: respects OS preference, persists in localStorage
+    (function() {
+      const root = document.documentElement;
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const apply = (mode) => {
+        if (mode === 'dark') root.classList.add('theme-dark');
+        else root.classList.remove('theme-dark');
+      };
+      apply(stored || (prefersDark ? 'dark' : 'light'));
+      const toggleBtn = document.getElementById('themeToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const isDark = root.classList.toggle('theme-dark');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+      }
+    })();
+
+    // Avoid accidental submit on Enter in number fields
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && e.target.matches('input[type="number"]')) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>

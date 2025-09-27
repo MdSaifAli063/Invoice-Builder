@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ company.name if company and company.name else 'Invoice' }}</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* Light theme (default) */
+    :root {
+      /* Layout */
+      --container-max: 1100px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 6px 16px rgba(0,0,0,.06);
+      --shadow-md: 0 10px 25px rgba(0,0,0,.10);
+
+      /* Typography */
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --text-size: 15px;
+      --line-height: 1.45;
+
+      /* Colors */
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #4b5563;
+      --border: #e5e7eb;
+      --primary: #0b1220;
+      --accent: #2563eb;
+      --accent-600: #1d4ed8;
+      --accent-700: #1e40af;
+      --table-header: #f3f4f6;
+      --table-row-alt: #fafbff;
+
+      --success: #16a34a;
+      --danger: #dc2626;
+
+      --toolbar-grad-from: #ffffff;
+      --toolbar-grad-to: #f9fafb;
+      --header-grad-from: #0b1220;
+      --header-grad-to: #1f2937;
+
+      --focus: 0 0 0 3px rgba(37,99,235,.35);
+    }
+
+    /* Dark theme overrides */
+    .theme-dark {
+      --bg: #0f172a;
+      --card: #0b1326;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2a44;
+      --primary: #cbd5e1;
+      --accent: #60a5fa;
+      --accent-600: #3b82f6;
+      --accent-700: #2563eb;
+      --table-header: #0f1a33;
+      --table-row-alt: #0e1830;
+
+      --toolbar-grad-from: #0b1326;
+      --toolbar-grad-to: #0b1326;
+      --header-grad-from: #0b1220;
+      --header-grad-to: #111827;
+
+      --focus: 0 0 0 3px rgba(96,165,250,.45);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 16px;
+      font-size: var(--text-size);
+      line-height: var(--line-height);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      background-color: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: linear-gradient(to right, var(--toolbar-grad-from), var(--toolbar-grad-to));
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .brand-mini { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--primary); }
+    .brand-mini img { width: 30px; height: 30px; object-fit: contain; border-radius: 6px; background: #fff; box-shadow: var(--shadow-sm); }
+    .brand-fallback {
+      width: 30px; height: 30px; display: grid; place-items: center;
+      border-radius: 6px; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, var(--accent-600), var(--accent-700));
+      box-shadow: var(--shadow-sm);
+    }
+    .toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+    /* Buttons */
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,.12); }
+    .btn:active { transform: translateY(0); }
+    .btn:focus-visible { outline: none; box-shadow: var(--focus); }
+    .btn svg { width: 16px; height: 16px; }
+    .btn-ghost { background: transparent; border-color: var(--border); }
+    .btn-primary { background: var(--accent); color: #fff; border-color: transparent; }
+    .btn-primary:hover { background: var(--accent-600); }
+
+    /* Header */
+    .header { padding: 24px 24px 14px 24px; background: linear-gradient(135deg, var(--header-grad-from), var(--header-grad-to)); color: #fff; }
+    .header-inner { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
+    .brand { display: flex; gap: 16px; align-items: center; }
+    .brand img { width: 64px; height: 64px; object-fit: contain; background: rgba(255,255,255,.06); border-radius: 10px; padding: 8px; }
+    .brand-info h1 { margin: 0; font-size: 22px; letter-spacing: .2px; }
+    .brand-info p { margin: 6px 0 0 0; color: #e5e7eb; font-size: 13px; line-height: 1.35; }
+
+    /* Meta info and status */
+    .meta { display: grid; gap: 6px; font-size: 13px; text-align: right; color: #e5e7eb; }
+    .meta strong { color: #fff; }
+    .status-pill {
+      display: inline-block; padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 12px;
+      background: #eef2ff; color: #3730a3; margin-top: 6px; text-transform: uppercase; letter-spacing: .3px;
+    }
+    .theme-dark .status-pill { background: #172554; color: #a5b4fc; }
+
+    /* Sections and cards */
+    .section { padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--card); }
+    .grid-2 { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .card { border: 1px solid var(--border); border-radius: 10px; padding: 16px; background: var(--card); box-shadow: var(--shadow-sm); }
+    .card h3 { margin: 0 0 10px 0; font-size: 16px; color: var(--primary); }
+    .muted { color: var(--muted); font-size: 14px; }
+
+    /* Table */
+    .table-wrap { overflow: auto; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    thead th {
+      position: sticky; top: 0; z-index: 1;
+      background: var(--table-header);
+      text-align: left; padding: 12px;
+      font-size: 14px; color: var(--primary);
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 14px; color: var(--text); }
+    tbody tr:nth-child(odd) td { background: var(--table-row-alt); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(37,99,235,0.06); }
+
+    .right { text-align: right; }
+    .nowrap { white-space: nowrap; }
+
+    /* Totals */
+    .totals {
+      margin-top: 16px; display: grid; gap: 8px; width: 100%; max-width: 380px; margin-left: auto;
+      background: linear-gradient(180deg, rgba(37,99,235,0.06), transparent);
+      padding: 12px; border-radius: 10px; border: 1px dashed var(--border);
+    }
+    .totals-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; font-size: 15px; color: var(--text); }
+    .totals-row.total { font-weight: 700; font-size: 16px; border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 4px; }
+
+    .footer-note { color: var(--muted); font-size: 12px; margin-top: 12px; }
+
+    /* Print styles */
+    @media print {
+      html, body { background: #fff !important; padding: 0; }
+      .toolbar { display: none !important; }
+      .container { box-shadow: none !important; border: none !important; }
+      .section { break-inside: avoid; }
+      thead { display: table-header-group; }
+      tr, img { break-inside: avoid; }
+      /* Remove decorative backgrounds for ink saving */
+      .header { background: #fff !important; color: #000 !important; border-bottom: 1px solid #ddd; }
+      .brand img { background: transparent !important; }
+      .totals { background: none !important; border: 1px solid #ddd !important; }
+      .status-pill { background: #eee !important; color: #000 !important; }
+      @page { margin: 14mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Toolbar -->
+    <div class="toolbar" role="banner">
+      <div class="brand-mini">
+        {% if company and company.logo_url %}
+          <img src="{{ company.logo_url }}" alt="{{ company.name or 'Company' }} logo">
+        {% else %}
+          <div class="brand-fallback" aria-hidden="true">
+            {{ (company.name or 'C')[:1] | upper }}
+          </div>
+        {% endif %}
+        <span>{{ company.name or 'Your Company Name' }}</span>
+      </div>
+      <div class="toolbar-actions">
+        <a class="btn btn-ghost" href="/setup" title="Back to setup">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+          Back
+        </a>
+        <button id="themeToggle" class="btn btn-ghost" type="button" title="Toggle light/dark theme" aria-label="Toggle theme">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13A9 9 0 1 1 11 2.36a7 7 0 1 0 10.64 10.64z"/></svg>
+          Theme
+        </button>
+        <button class="btn btn-primary" onclick="window.print()" title="Print this invoice">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9V2h12v7M6 14H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2m-2 0H8v8h8v-8Z"/></svg>
+          Print
+        </button>
+      </div>
+    </div>
+
+    <!-- Header with brand and meta -->
+    <div class="header">
+      <div class="header-inner">
+        <div class="brand">
+          {% if company and company.logo_url %}
+            <img src="{{ company.logo_url }}" alt="{{ company.name or 'Company' }} logo">
+          {% else %}
+            <img src="https://via.placeholder.com/96x96?text=Logo" alt="Company logo placeholder">
+          {% endif %}
+          <div class="brand-info">
+            <h1>{{ company.name if company and company.name else 'Your Company Name' }}</h1>
+            <p>
+              {% if company and company.address %}{{ company.address }}<br>{% endif %}
+              {% if company and company.phone %}Phone: {{ company.phone }}{% endif %}
+              {% if company and company.email %}{% if company and company.phone %} · {% endif %}Email: {{ company.email }}{% endif %}
+              {% if company and company.website %}<br>{{ company.website }}{% endif %}
+            </p>
+          </div>
+        </div>
+        <div class="meta">
+          <div><strong>Invoice</strong> #{{ invoice_number or '0001' }}</div>
+          <div><strong>Date:</strong> {{ invoice_date or 'yyyy-mm-dd' }}</div>
+          {% if due_date %}<div><strong>Due:</strong> {{ due_date }}</div>{% endif %}
+          {% set paid = (amount_paid is defined and (amount_paid|float) >= (total|float)) %}
+          <div class="status-pill" aria-live="polite">
+            {% if paid %}Paid{% else %}Balance Due: {{ currency_symbol or '' }}{{ '%.2f'|format((total|float) - (amount_paid|float)) }}{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bill To and From -->
+    <div class="section">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Bill To</h3>
+          <div class="muted">
+            <div>{{ client.name or 'Client Name' }}</div>
+            {% if client and client.address %}<div>{{ client.address }}</div>{% endif %}
+            {% if client and client.email %}<div>{{ client.email }}</div>{% endif %}
+            {% if client and client.phone %}<div>{{ client.phone }}</div>{% endif %}
+          </div>
+        </div>
+        <div class="card">
+          <h3>From</h3>
+          <div class="muted">
+            <div>{{ company.name if company and company.name else 'Your Company Name' }}</div>
+            {% if company and company.address %}<div>{{ company.address }}</div>{% endif %}
+            {% if company and company.email %}<div>{{ company.email }}</div>{% endif %}
+            {% if company and company.phone %}<div>{{ company.phone }}</div>{% endif %}
+            {% if company and company.website %}<div>{{ company.website }}</div>{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items table -->
+    <div class="section">
+      <div class="table-wrap" role="region" aria-label="Invoice line items" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 80px;">Qty</th>
+              <th>Description</th>
+              <th class="right nowrap" style="width: 140px;">Unit Price</th>
+              <th class="right nowrap" style="width: 140px;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+              {% set line_total = item.quantity * item.unit_price %}
+              <tr>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.description }}</td>
+                <td class="right nowrap">{{ currency_symbol or '' }}{{ '%.2f'|format(item.unit_price) }}</td>
+                <td class="right nowrap">{{ currency_symbol or '' }}{{ '%.2f'|format(line_total) }}</td>
+              </tr>
+            {% endfor %}
+            {% if not items or items|length == 0 %}
+              <tr><td colspan="4" class="muted">No items.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Totals -->
+      <div class="totals" aria-live="polite">
+        <div class="totals-row">
+          <div>Subtotal</div>
+          <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(subtotal) }}</div>
+        </div>
+        <div class="totals-row">
+          <div>Tax{% if tax_rate %} ({{ tax_rate }}%){% endif %}</div>
+          <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(tax) }}</div>
+        </div>
+        <div class="totals-row">
+          <div>Shipping</div>
+          <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(shipping) }}</div>
+        </div>
+        <div class="totals-row total">
+          <div>Total</div>
+          <div class="right">{{ currency_symbol or '' }}{{ '%.2f'|format(total) }}</div>
+        </div>
+        {% if amount_paid is defined and amount_paid|float > 0 %}
+        <div class="totals-row">
+          <div>Amount Paid</div>
+          <div class="right">- {{ currency_symbol or '' }}{{ '%.2f'|format(amount_paid|float) }}</div>
+        </div>
+        <div class="totals-row">
+          <div>Balance Due</div>
+          <div class="right"><strong>{{ currency_symbol or '' }}{{ '%.2f'|format(total - (amount_paid|float)) }}</strong></div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="footer-note">
+        {% if notes %}{{ notes }}{% else %}Thank you for your business!{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme handling: respects OS preference, persists in localStorage so it matches /setup
+    (function() {
+      const root = document.documentElement;
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const apply = (mode) => {
+        if (mode === 'dark') root.classList.add('theme-dark');
+        else root.classList.remove('theme-dark');
+      };
+      apply(stored || (prefersDark ? 'dark' : 'light'));
+      const toggleBtn = document.getElementById('themeToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const isDark = root.classList.toggle('theme-dark');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+      }
+    })();
+
+    // Auto-print when visiting /invoice?print=1 (default), disable with ?print=0
+    (function() {
+      const params = new URLSearchParams(location.search);
+      const shouldAutoPrint = params.get('print') !== '0';
+      if (shouldAutoPrint) setTimeout(() => window.print(), 300);
+    })();
+  </script>
+</body>
+</html>
