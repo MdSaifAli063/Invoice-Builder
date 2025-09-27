@@ -30,6 +30,8 @@ All data is in-memory for simplicity (resets on restart).
 - Invoice page
 ![image](https://github.com/MdSaifAli063/Invoice-Builder/blob/f9dcfa233030cb1ec12f62c2e00448636728f466/Screenshot%202025-09-28%20015143.png)
 
+- Print
+![image](https://github.com/MdSaifAli063/Invoice-Builder/blob/f07a5f7e06ebde857ed121fcc5d3b50ebc13e56b/Screenshot%202025-09-28%20020622.png)
 
 
 ## 🚀 Quickstart
