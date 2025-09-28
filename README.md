@@ -31,6 +31,7 @@ All data is in-memory for simplicity (resets on restart).
 ![image](https://github.com/MdSaifAli063/Invoice-Builder/blob/f9dcfa233030cb1ec12f62c2e00448636728f466/Screenshot%202025-09-28%20015143.png)
 
 - Print
+  
 ![image](https://github.com/MdSaifAli063/Invoice-Builder/blob/f07a5f7e06ebde857ed121fcc5d3b50ebc13e56b/Screenshot%202025-09-28%20020622.png)
 
 
@@ -44,11 +45,8 @@ source .venv/bin/activate
 
 pip install flask
 
-
 Run the app
 python app.py
-
-
 
 Open in your browser
 Setup UI: http://localhost:5000/setup
@@ -56,10 +54,9 @@ Invoice view: http://localhost:5000/invoice
 Verify print/log output (optional)
 curl http://localhost:5000/_test_print
 
-
 You should see both a print() line and a structured INFO log in your terminal.
 
-🧭 App Structure
+## 🧭 App Structure
 app.py                 # Flask application, routes, in-memory data, logging
 templates/
   setup.html           # Configure company/client/invoice and manage items
