@@ -34,6 +34,7 @@ All data is in-memory for simplicity (resets on restart).
   
 ![image](https://github.com/MdSaifAli063/Invoice-Builder/blob/f07a5f7e06ebde857ed121fcc5d3b50ebc13e56b/Screenshot%202025-09-28%20020622.png)
 
+---
 
 ## 🚀 Quickstart
 
@@ -64,10 +65,12 @@ templates/
 static/ (optional)
   css/app.css          # Extract inline CSS here if desired
 
-
 Note: Ensure your HTML templates live in a "templates" directory next to app.py.
 
-🔌 Endpoints
+---
+
+## 🔌 Endpoints
+
 GET / → redirects to /setup
 GET /setup → setup page (forms for company, client, invoice meta, items table)
 GET /invoice → printable invoice page (supports ?print=1 to auto-open print dialog)
@@ -87,7 +90,10 @@ POST /clear_all → resets everything to defaults
 Utility:
 
 GET /_test_print → emits both print() and logger output
-🧪 cURL Examples
+
+---
+
+## 🧪 cURL Examples
 Add an item:
 
 curl -X POST http://localhost:5000/add_item \
@@ -95,14 +101,10 @@ curl -X POST http://localhost:5000/add_item \
   -d "description=Design work" \
   -d "unit_price=125.50"
 
-
-
 Remove an item by description:
 
 curl -X POST http://localhost:5000/remove_item \
   -d "description=Design work"
-
-
 
 Update meta:
 
@@ -116,12 +118,14 @@ curl -X POST http://localhost:5000/update_meta \
   -d "amount_paid=0" \
   -d "notes=Payable within 30 days."
 
+---
 
-🖨️ Printing
+## 🖨️ Printing
 Open /invoice and use your browser’s Print dialog.
 To auto-open print, visit /invoice?print=1.
 Tip: Use the browser’s “Save as PDF” to export.
-📜 Logging and Visibility
+
+## 📜 Logging and Visibility
 All print() calls are auto-flushed to stdout, so you’ll see them immediately.
 Structured logs stream to stdout; every request is logged before and after handling.
 Avoid duplicate logs in debug mode:
@@ -129,8 +133,7 @@ Avoid duplicate logs in debug mode:
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
 
-
-
+---
 🛠️ Customizing the UI
 Tweak templates/setup.html and templates/invoice.html to match your brand.
 Extract inline CSS into static/css/app.css and include:
