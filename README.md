@@ -163,7 +163,7 @@ For UI tweaks, include before/after screenshots.
 
 ---
 
-📄 License
+## 📄 License
 
 No license specified. Choose a license (e.g., MIT, Apache-2.0) and add a LICENSE file to clarify usage.
 
