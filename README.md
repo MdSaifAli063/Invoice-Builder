@@ -37,7 +37,6 @@ All data is in-memory for simplicity (resets on restart).
 ## 🚀 Quickstart
 
 1) Create a virtual environment and install dependencies
-```bash
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # macOS/Linux:
