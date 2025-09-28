@@ -121,24 +121,25 @@ curl -X POST http://localhost:5000/update_meta \
 
 ## 🖨️ Printing
 
-Open /invoice and use your browser’s Print dialog.
-To auto-open print, visit /invoice?print=1.
-Tip: Use the browser’s “Save as PDF” to export.
+- Open /invoice and use your browser’s Print dialog.
+- To auto-open print, visit /invoice?print=1.
+- Tip: Use the browser’s “Save as PDF” to export.
 
 ---
 
 ## 📜 Logging and Visibility
 
-All print() calls are auto-flushed to stdout, so you’ll see them immediately.
-Structured logs stream to stdout; every request is logged before and after handling.
-Avoid duplicate logs in debug mode:
+- All print() calls are auto-flushed to stdout, so you’ll see them immediately.
+- Structured logs stream to stdout; every request is logged before and after handling.
+- Avoid duplicate logs in debug mode:
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
 
 ---
 ## 🛠️ Customizing the UI
-Tweak templates/setup.html and templates/invoice.html to match your brand.
+
+- Tweak templates/setup.html and templates/invoice.html to match your brand.
 Extract inline CSS into static/css/app.css and include:
 <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 
@@ -148,22 +149,22 @@ Keep headings/labels clear for printability and accessibility.
 
 ## 🧯 Troubleshooting
 I don’t see print output
-Use /_test_print to verify terminal logs.
-Ensure you’re watching the server process logs (stdout).
-In containers/process managers, stdout may be redirected — check service logs.
+- Use /_test_print to verify terminal logs.
+- Ensure you’re watching the server process logs (stdout).
+- In containers/process managers, stdout may be redirected — check service logs.
 Totals look wrong
-Ensure quantity and unit_price are numeric. The app clamps tax_rate to 0–100 and defaults empty inputs.
+- Ensure quantity and unit_price are numeric. The app clamps tax_rate to 0–100 and defaults empty inputs.
 
 ---
 
 ## 🤝 Contributing
-Fork the repo, create a feature branch, and open a PR.
-For UI tweaks, include before/after screenshots.
+- Fork the repo, create a feature branch, and open a PR.
+- For UI tweaks, include before/after screenshots.
 
 ---
 
 ## 📄 License
 
-No license specified. Choose a license (e.g., MIT, Apache-2.0) and add a LICENSE file to clarify usage.
+- No license specified. Choose a license (e.g., MIT, Apache-2.0) and add a LICENSE file to clarify usage.
 
 Made with ❤️ using Flask.
