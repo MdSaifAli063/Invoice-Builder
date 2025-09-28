@@ -121,11 +121,15 @@ curl -X POST http://localhost:5000/update_meta \
 ---
 
 ## 🖨️ Printing
+
 Open /invoice and use your browser’s Print dialog.
 To auto-open print, visit /invoice?print=1.
 Tip: Use the browser’s “Save as PDF” to export.
 
+---
+
 ## 📜 Logging and Visibility
+
 All print() calls are auto-flushed to stdout, so you’ll see them immediately.
 Structured logs stream to stdout; every request is logged before and after handling.
 Avoid duplicate logs in debug mode:
@@ -134,14 +138,16 @@ if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
 
 ---
-🛠️ Customizing the UI
+## 🛠️ Customizing the UI
 Tweak templates/setup.html and templates/invoice.html to match your brand.
 Extract inline CSS into static/css/app.css and include:
 <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 
-
 Keep headings/labels clear for printability and accessibility.
-🧯 Troubleshooting
+
+---
+
+## 🧯 Troubleshooting
 I don’t see print output
 Use /_test_print to verify terminal logs.
 Ensure you’re watching the server process logs (stdout).
