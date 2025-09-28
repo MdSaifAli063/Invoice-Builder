@@ -93,7 +93,7 @@ GET /_test_print → emits both print() and logger output
 
 ---
 
-## 🧪 cURL Examples
+## 🧪 CURL Examples
 Add an item:
 
 curl -X POST http://localhost:5000/add_item \
@@ -154,10 +154,17 @@ Ensure you’re watching the server process logs (stdout).
 In containers/process managers, stdout may be redirected — check service logs.
 Totals look wrong
 Ensure quantity and unit_price are numeric. The app clamps tax_rate to 0–100 and defaults empty inputs.
-🤝 Contributing
+
+---
+
+## 🤝 Contributing
 Fork the repo, create a feature branch, and open a PR.
 For UI tweaks, include before/after screenshots.
+
+---
+
 📄 License
+
 No license specified. Choose a license (e.g., MIT, Apache-2.0) and add a LICENSE file to clarify usage.
 
 Made with ❤️ using Flask.
