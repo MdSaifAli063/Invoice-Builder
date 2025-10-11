@@ -57,12 +57,12 @@ curl http://localhost:5000/_test_print
 You should see both a print() line and a structured INFO log in your terminal.
 
 ## 🧭 App Structure
-app.py                 # Flask application, routes, in-memory data, logging
-templates/
-  setup.html           # Configure company/client/invoice and manage items
-  invoice.html         # Pretty, printable invoice view
-static/ (optional)
-  css/app.css          # Extract inline CSS here if desired
+- app.py                 # Flask application, routes, in-memory data, logging
+- templates/
+ - setup.html           # Configure company/client/invoice and manage items
+  - invoice.html         # Pretty, printable invoice view
+- static/ (optional)
+ - css/app.css          # Extract inline CSS here if desired
 
 Note: Ensure your HTML templates live in a "templates" directory next to app.py.
 
