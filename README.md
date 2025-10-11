@@ -70,25 +70,27 @@ Note: Ensure your HTML templates live in a "templates" directory next to app.py.
 
 ## 🔌 Endpoints
 
-GET / → redirects to /setup
-GET /setup → setup page (forms for company, client, invoice meta, items table)
-GET /invoice → printable invoice page (supports ?print=1 to auto-open print dialog)
+- GET / → redirects to /setup
+- GET /setup → setup page (forms for company, client, invoice meta, items table)
+- GET /invoice → printable invoice page (supports ?print=1 to auto-open print dialog)
+  
 Mutating endpoints (form POSTs):
 
-POST /add_item
-Fields: quantity (int), description (str), unit_price (float)
-POST /remove_item
-Fields: description (str, exact match)
-POST /update_company
-Fields: name, address, phone, email, website, logo_url
-POST /update_client
-Fields: name, address, phone, email
-POST /update_meta
-Fields: invoice_number, invoice_date, due_date, currency_symbol, tax_rate, shipping, amount_paid, notes
-POST /clear_all → resets everything to defaults
+- POST /add_item
+- Fields: quantity (int), description (str), unit_price (float)
+- POST /remove_item
+- Fields: description (str, exact match)
+- POST /update_company
+- Fields: name, address, phone, email, website, logo_url
+- POST /update_client
+- Fields: name, address, phone, email
+- POST /update_meta
+- Fields: invoice_number, invoice_date, due_date, currency_symbol, tax_rate, shipping, amount_paid, notes
+- POST /clear_all → resets everything to defaults
+  
 Utility:
 
-GET /_test_print → emits both print() and logger output
+-GET /_test_print → emits both print() and logger output
 
 ---
 
